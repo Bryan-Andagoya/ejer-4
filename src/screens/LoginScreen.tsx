@@ -1,8 +1,8 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View, Alert } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { StyleSheet, Text, View, Alert, Image } from "react-native";
 
+import { CustomButton, CustomTextInput } from "../common";
 import { StackNavigatorParamList } from "../navigation";
 
 interface Props extends StackScreenProps<StackNavigatorParamList, "Login"> {}
@@ -10,44 +10,67 @@ interface Props extends StackScreenProps<StackNavigatorParamList, "Login"> {}
 export const LoginScreen = ({ navigation }: Props) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [usernameError, setUsernameError] = useState<string | undefined>();
+  const [passwordError, setPasswordError] = useState<string | undefined>();
 
   const loginPressedHandler = () => {
-    Alert.alert("Success", `Your username is ${username}`);
+    if (!username || !password) {
+      if (!username) {
+        setUsernameError("Username is required");
+      }
+      if (!password) {
+        setPasswordError("Password is required");
+      }
+    } else {
+      setUsername("");
+      setPassword("");
+      setUsernameError(undefined);
+      setPasswordError(undefined);
+      Alert.alert("Success", `Your username is ${username}`);
+    }
+  };
+
+  const goToImages = () => {
+    navigation.push("Images");
   };
 
   return (
     <View style={styles.container}>
+      <View style={styles.imageContainer}>
+        <Image
+          source={require("../../assets/login.png")}
+          style={styles.image}
+        />
+      </View>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Login</Text>
       </View>
       <View style={styles.form}>
-        <View style={styles.hintContainer}>
-          <Text style={styles.hintText}>Enter your username</Text>
-        </View>
-        <View>
-          <TextInput
+        <View style={styles.inputContainer}>
+          <CustomTextInput
+            hint="Enter your username"
             placeholder="Username"
-            style={styles.input}
             value={username}
             onChangeText={setUsername}
+            error={usernameError}
           />
         </View>
-        <View style={styles.hintContainer}>
-          <Text style={styles.hintText}>Enter your password</Text>
-        </View>
         <View>
-          <TextInput
+          <CustomTextInput
+            hint="Enter your password"
             placeholder="Password"
-            style={styles.input}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
+            error={passwordError}
           />
         </View>
+        <View style={{ height: 24 }} />
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={loginPressedHandler}>
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
+          <CustomButton text="Login" onPress={loginPressedHandler} />
+        </View>
+        <View style={styles.buttonContainer}>
+          <CustomButton text="Go To Images" onPress={goToImages} />
         </View>
       </View>
     </View>
@@ -67,41 +90,24 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
+  imageContainer: {
+    alignItems: "center",
+    paddingTop: 8,
+  },
+  image: {
+    width: 100,
+    height: 100,
+  },
   form: {
-    padding: 16,
+    paddingVertical: 16,
     width: "70%",
     alignSelf: "center",
   },
-  hintContainer: {
-    paddingBottom: 8,
-  },
-  hintText: {
-    fontSize: 16,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "lightgray",
-    borderRadius: 4,
-    padding: 8,
-    marginBottom: 16,
-    width: "100%",
+  inputContainer: {
+    paddingVertical: 8,
   },
   buttonContainer: {
-    paddingTop: 16,
-    width: "100%",
-  },
-  button: {
     paddingVertical: 8,
-    paddingHorizontal: 16,
-    backgroundColor: "deepskyblue",
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    elevation: 4,
     width: "100%",
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
   },
 });

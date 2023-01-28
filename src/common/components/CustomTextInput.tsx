@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -13,15 +13,19 @@ interface Props {
   value: TextInputProps["value"];
   onChangeText: TextInputProps["onChangeText"];
   secureTextEntry?: TextInputProps["secureTextEntry"];
+  error?: string;
 }
 
-const CustomTextInput = ({
+export const CustomTextInput = ({
   placeholder,
   hint,
   value,
   onChangeText,
   secureTextEntry,
+  error,
 }: Props) => {
+  const [isFocus, setIsFocus] = useState(false);
+
   return (
     <>
       <View style={styles.hintContainer}>
@@ -29,16 +33,21 @@ const CustomTextInput = ({
       </View>
       <TextInput
         placeholder={placeholder}
-        style={styles.input}
+        style={[styles.input, isFocus && { borderColor: "deepskyblue" }]}
         value={value}
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
+        onFocus={() => setIsFocus(true)}
+        onBlur={() => setIsFocus(false)}
       />
+      {error ? (
+        <View style={styles.errorContainer}>
+          <Text style={styles.error}>{error}</Text>
+        </View>
+      ) : null}
     </>
   );
 };
-
-export default CustomTextInput;
 
 const styles = StyleSheet.create({
   hintContainer: {
@@ -52,7 +61,12 @@ const styles = StyleSheet.create({
     borderColor: "lightgray",
     borderRadius: 4,
     padding: 8,
-    marginBottom: 16,
     width: "100%",
+  },
+  errorContainer: {
+    paddingTop: 2,
+  },
+  error: {
+    color: "red",
   },
 });

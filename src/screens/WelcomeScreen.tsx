@@ -1,7 +1,8 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
+import { CustomButton } from "../common";
 import { StackNavigatorParamList } from "../navigation";
 
 interface Props extends StackScreenProps<StackNavigatorParamList, "Welcome"> {}
@@ -27,9 +28,7 @@ export const WelcomeScreen = ({ navigation }: Props) => {
         </Text>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={loginPressedHandler}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
+        <CustomButton text="Login" onPress={loginPressedHandler} />
       </View>
     </View>
   );
@@ -59,21 +58,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     paddingVertical: 16,
-    width: "100%",
-    alignItems: "center",
-  },
-  button: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    backgroundColor: "deepskyblue",
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    elevation: 4,
     width: "70%",
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
+    alignItems: "center",
   },
 });
