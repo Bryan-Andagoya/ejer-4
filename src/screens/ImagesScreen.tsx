@@ -4,12 +4,12 @@ import {
   StyleSheet,
   View,
   FlatList,
-  Text,
   Alert,
-  Image,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 
+import { CharacterCard } from "../components";
 import { Character } from "../models";
 import { StackNavigatorParamList } from "../navigation";
 
@@ -26,15 +26,9 @@ export const ImagesScreen = ({ navigation }: Props) => {
   }, []);
 
   const renderItem = ({ item }: { item: Character }) => (
-    <View style={styles.itemContainer}>
-      <View>
-        <Image source={{ uri: item.image }} style={styles.image} />
-      </View>
-      <View style={styles.descriptionContainer}>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text>{item.chronologicalInformation.firstAppearance}</Text>
-      </View>
-    </View>
+    <TouchableOpacity onPress={() => navigation.push("Details", item)}>
+      <CharacterCard character={item} />
+    </TouchableOpacity>
   );
 
   const Separetor = () => <View style={styles.separetor} />;
@@ -67,32 +61,11 @@ const styles = StyleSheet.create({
   listContainer: {
     padding: 8,
   },
-  itemContainer: {
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderRadius: 8,
-    backgroundColor: "white",
-    elevation: 2,
-    flexDirection: "row",
-    borderColor: "whitesmoke",
-    borderWidth: 1,
-  },
+
   separetor: {
     height: 8,
   },
-  image: {
-    height: 50,
-    width: 50,
-    borderRadius: 8,
-  },
-  name: {
-    fontWeight: "bold",
-    color: "deepskyblue",
-    marginBottom: 3,
-  },
-  descriptionContainer: {
-    paddingHorizontal: 16,
-  },
+
   loaderContainer: {
     flex: 1,
     justifyContent: "center",
